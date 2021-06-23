@@ -44,7 +44,9 @@ extension _ParameterElementExntensions on ParameterElement {
   }
 
   String get codeFromMap {
-    if (type.isDartCoreList) {
+    if (type.baseName == "Widget") {
+      return "";
+    } else if (type.isDartCoreList) {
       return "$name: map.get<List${type.nullablePrefix}>(\"$name\", $defaultValue)${type.codeFromMap}$_suffixValue";
     } else if (type.isDartCoreMap) {
       return "$name: map.get<Map${type.nullablePrefix}>(\"$name\", $defaultValue)${type.codeFromMap}$_suffixValue";
@@ -54,13 +56,17 @@ extension _ParameterElementExntensions on ParameterElement {
       return "$name: map.get<$type>(\"$name\", $defaultValue)${type.codeFromMap}$_suffixValue";
     } else if (type.isEnum) {
       return "$name: ${type.baseName}.values.firstWhere((e) => e.index == map.get<int${type.nullablePrefix}>(\"$name\", ${defaultValueCode != null ? (defaultValueCode! + ".index") : "null"}))";
+    } else if (type.isDartCoreFunction) {
+      return "";
     } else {
       return "$name: map.get<DynamicMap>(\"$name\", <String, dynamic>{}).to${type.baseName}()${type.codeFromMap}${defaultValueCode == null ? "" : "?? " + defaultValue}";
     }
   }
 
   String get codeToMap {
-    if (type.isDartCoreList) {
+    if (type.baseName == "Widget") {
+      return "";
+    } else if (type.isDartCoreList) {
       return "if(ref.$name.isNotEmpty) \"$name\": ref.$name${type.nullablePrefix}.map((e) => e${type.codeToMap})";
     } else if (type.isDartCoreMap) {
       return "if(ref.$name.isNotEmpty) \"$name\": ref.$name${type.nullablePrefix}.map((k, v) => MapEntry(k, v${type.codeToMap}))";
@@ -70,6 +76,8 @@ extension _ParameterElementExntensions on ParameterElement {
       return "if(ref.$name.isNotEmpty) \"$name\": ref.$name";
     } else if (type.isEnum) {
       return "$_prefixCondition\"$name\": ref.$name${type.nullablePrefix}.index";
+    } else if (type.isDartCoreFunction) {
+      return "";
     } else {
       return "$_prefixCondition\"$name\": ref.$name${type.codeToMap}";
     }
@@ -93,6 +101,12 @@ extension _DartTypeExtensions on DartType {
           continue;
         }
         return "Module";
+      }
+      for (final superType in e.allSupertypes) {
+        if (superType.toString() != "Widget") {
+          continue;
+        }
+        return "Widget";
       }
     }
     final name = toString().replaceAll("?", "");

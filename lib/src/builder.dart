@@ -73,18 +73,22 @@ class MasamuneModuleGenerator extends GeneratorForAnnotation<MasamuneModule> {
 
   String _generateFromMapCode(ClassElement element) {
     return [
-      ...element.constructors.first.parameters.map(
-        (e) => e.codeFromMap,
-      ),
+      ...element.constructors.first.parameters
+          .map(
+            (e) => e.codeFromMap,
+          )
+          .where((e) => e.isNotEmpty),
     ].join(",");
   }
 
   String _generateToMapCode(ClassElement element) {
     return [
       "\"type\": ref.type",
-      ...element.constructors.first.parameters.map(
-        (e) => e.codeToMap,
-      ),
+      ...element.constructors.first.parameters
+          .map(
+            (e) => e.codeToMap,
+          )
+          .where((e) => e.isNotEmpty),
     ].join(",");
   }
 }
