@@ -1,6 +1,6 @@
 # Katana Module
 
-[![Version](https://img.shields.io/badge/version-0.8.0-blue.svg)](https://mathru.net)
+[![Version](https://img.shields.io/badge/version-0.8.3-blue.svg)](https://mathru.net)
 [![Language](https://img.shields.io/badge/language-dart-blue.svg)](https://dart.dev/)
 [![License: BSD](https://img.shields.io/badge/license-BSD-purple.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
@@ -16,7 +16,7 @@ It defines several extension methods and global functions.
 Add this to your package's pubspec.yaml file:
 ```yaml
 dev_dependencies:
-  katana_module_builder: ^0.8.0
+  katana_module_builder: ^0.8.3
 ```
 You should then run `flutter pub upgrade`.
 
