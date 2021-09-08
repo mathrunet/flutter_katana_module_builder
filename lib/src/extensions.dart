@@ -109,13 +109,17 @@ extension _DartTypeExtensions on DartType {
         return "Widget";
       }
     }
-    final name = toString().replaceAll("?", "");
+    final name = typeName;
     switch (name) {
       case "EdgeInsetsGeometry":
         return "EdgeInsets";
       default:
         return name;
     }
+  }
+
+  String get typeName {
+    return toString().replaceAll("?", "");
   }
 
   bool get isEnum {
@@ -178,6 +182,8 @@ extension _DartTypeExtensions on DartType {
         return "$nullablePrefix.cast<String, $type>()";
       } else if (type.isEnum) {
         return "$nullablePrefix.cast<String, int${type.nullablePrefix}>()$nullablePrefix.map((k,v) => MapEntry(k, ${type.baseName}.values.firstWhere((n) => n.index == v)))";
+      } else if (type.baseName == "Module") {
+        return "$nullablePrefix.cast<String, DynamicMap${type.nullablePrefix}>()$nullablePrefix.map((k,v) => MapEntry(k, v${type.nullablePrefix}.toModule<${type.typeName}>()))";
       } else {
         return "$nullablePrefix.cast<String, DynamicMap${type.nullablePrefix}>()$nullablePrefix.map((k,v) => MapEntry(k, v${type.nullablePrefix}.to${type.baseName}()))";
       }
@@ -190,6 +196,8 @@ extension _DartTypeExtensions on DartType {
         return "$nullablePrefix.cast<$type>()";
       } else if (type.isEnum) {
         return "$nullablePrefix.cast<int${type.nullablePrefix}>()$nullablePrefix.map((e) => ${type.baseName}.values.firstWhere((n) => n.index == e)).removeEmpty()";
+      } else if (type.baseName == "Module") {
+        return "$nullablePrefix.cast<DynamicMap>()$nullablePrefix.map((e) => e${type.nullablePrefix}.toModule<${type.typeName}>()).removeEmpty()";
       } else {
         return "$nullablePrefix.cast<DynamicMap>()$nullablePrefix.map((e) => e${type.nullablePrefix}.to${type.baseName}()).removeEmpty()";
       }
