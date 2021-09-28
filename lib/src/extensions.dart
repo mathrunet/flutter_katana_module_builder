@@ -97,16 +97,15 @@ extension _DartTypeExtensions on DartType {
     final e = element;
     if (e is ClassElement && e.allSupertypes.isNotEmpty) {
       for (final superType in e.allSupertypes) {
-        if (superType.toString() != "Module") {
-          continue;
+        if (superType.toString() == "Module") {
+          return "Module";
         }
-        return "Module";
-      }
-      for (final superType in e.allSupertypes) {
-        if (superType.toString() != "Widget") {
-          continue;
+        if (superType.toString() == "Widget") {
+          return "Widget";
         }
-        return "Widget";
+        // if (superType.toString().startsWith("QueryModule")) {
+        //   return "QueryModule";
+        // }
       }
     }
     final name = typeName;
