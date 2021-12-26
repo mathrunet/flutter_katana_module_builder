@@ -1,6 +1,6 @@
 name: katana_module_builder
 description: Building system for modules.
-version: 0.9.0+1
+version: 0.9.0+3
 homepage: https://mathru.net
 repository: https://github.com/mathrunet/flutter_katana_module_builder
 

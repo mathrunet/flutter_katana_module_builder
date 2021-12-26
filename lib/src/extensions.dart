@@ -183,6 +183,8 @@ extension _DartTypeExtensions on DartType {
         return "$nullablePrefix.cast<String, int${type.nullablePrefix}>()$nullablePrefix.map((k,v) => MapEntry(k, ${type.baseName}.values.firstWhere((n) => n.index == v)))";
       } else if (type.baseName == "Module") {
         return "$nullablePrefix.cast<String, DynamicMap${type.nullablePrefix}>()$nullablePrefix.map((k,v) => MapEntry(k, v${type.nullablePrefix}.toModule<${type.typeName}>()))";
+      } else if (type.isDynamic) {
+        return "$nullablePrefix.cast<String, DynamicMap${type.nullablePrefix}>()$nullablePrefix.map((k,v) => MapEntry(k, v${type.nullablePrefix}))";
       } else {
         return "$nullablePrefix.cast<String, DynamicMap${type.nullablePrefix}>()$nullablePrefix.map((k,v) => MapEntry(k, v${type.nullablePrefix}.to${type.baseName}()))";
       }
@@ -197,6 +199,8 @@ extension _DartTypeExtensions on DartType {
         return "$nullablePrefix.cast<int${type.nullablePrefix}>()$nullablePrefix.map((e) => ${type.baseName}.values.firstWhere((n) => n.index == e)).removeEmpty()";
       } else if (type.baseName == "Module") {
         return "$nullablePrefix.cast<DynamicMap>()$nullablePrefix.map((e) => e${type.nullablePrefix}.toModule<${type.typeName}>()).removeEmpty()";
+      } else if (type.isDynamic) {
+        return "$nullablePrefix.cast<DynamicMap>()$nullablePrefix.map((e) => e${type.nullablePrefix}).removeEmpty()";
       } else {
         return "$nullablePrefix.cast<DynamicMap>()$nullablePrefix.map((e) => e${type.nullablePrefix}.to${type.baseName}()).removeEmpty()";
       }
@@ -209,17 +213,25 @@ extension _DartTypeExtensions on DartType {
       if (type == null) {
         return "";
       }
-      if (type.isCollection) {
+      if (type.isDartCoreMap) {
+        return "$nullablePrefix.map((k, v) => MapEntry(k, v${type.codeToMap}))";
+      } else if (type.isCollection) {
         return "$nullablePrefix.map((e) => e${type.codeToMap})";
       } else if (type.isEnum) {
         return "$nullablePrefix.index";
       } else if (type.isDartCoreClass) {
         return "";
+      } else if (type.isDynamic) {
+        return nullablePrefix;
       } else {
         return "$nullablePrefix.toMap()";
       }
+    } else if (isDartCoreMap) {
+      return "$nullablePrefix.map((k, v) => MapEntry(k, v$codeToMap))";
     } else if (isDartCoreClass) {
       return "";
+    } else if (isDynamic) {
+      return nullablePrefix;
     } else {
       return "$nullablePrefix.toMap()";
     }
