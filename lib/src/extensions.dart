@@ -47,6 +47,9 @@ extension _ParameterElementExntensions on ParameterElement {
     if (type.baseName == "Widget") {
       return "";
     } else if (type.isDartCoreList) {
+      if (type.genericType?.baseName == "Widget") {
+        return "";
+      }
       return "$name: map.get<List${type.nullablePrefix}>(\"$name\", $defaultValue)${type.codeFromMap}$_suffixValue";
     } else if (type.isDartCoreMap) {
       return "$name: map.get<Map${type.nullablePrefix}>(\"$name\", $defaultValue)${type.codeFromMap}$_suffixValue";
@@ -67,6 +70,9 @@ extension _ParameterElementExntensions on ParameterElement {
     if (type.baseName == "Widget") {
       return "";
     } else if (type.isDartCoreList) {
+      if (type.genericType?.baseName == "Widget") {
+        return "";
+      }
       return "if(ref.$name.isNotEmpty) \"$name\": ref.$name${type.nullablePrefix}.map((e) => e${type.codeToMap})";
     } else if (type.isDartCoreMap) {
       return "if(ref.$name.isNotEmpty) \"$name\": ref.$name${type.nullablePrefix}.map((k, v) => MapEntry(k, v${type.codeToMap}))";
